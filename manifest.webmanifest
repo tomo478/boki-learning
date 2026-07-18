@@ -1,0 +1,15 @@
+{
+  "name": "はじめての簿記教室",
+  "short_name": "簿記教室",
+  "description": "ゼロから日商簿記3級をめざす学習サイト。全8章の解説と4択クイズ・模擬テスト付き。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf6ec",
+  "theme_color": "#cf4a2b",
+  "lang": "ja",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>はじめての簿記教室 | 日商簿記3級をめざす学習サイト</title>
+<meta name="theme-color" content="#cf4a2b">
+<meta name="description" content="ゼロから日商簿記3級をめざす無料学習サイト。全8章の解説と4択クイズ・模擬テスト付き。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -332,11 +337,43 @@ footer{
   border-top:3px double var(--line);background:var(--paper-dark);
   text-align:center;padding:26px 20px;font-size:12px;color:var(--ink-soft);
 }
+/* ---------- モバイル対応 ---------- */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-scroll>table{margin-top:0;margin-bottom:0}
+.table-scroll{margin:12px 0 6px}
+@media(max-width:820px){
+  nav::after{
+    content:'';position:absolute;right:0;top:0;height:100%;width:26px;
+    background:linear-gradient(90deg,rgba(250,246,236,0),rgba(250,246,236,.95));
+    pointer-events:none;
+  }
+}
 @media(max-width:640px){
   .bspl{grid-template-columns:1fr}
-  .card{padding:19px 17px}
+  .card{padding:19px 16px}
+  .card h3{font-size:16.5px}
+  header{padding:30px 18px 26px}
   .hanko{width:52px;height:52px;font-size:20px;top:12px}
-  .journal th,.journal td{padding:7px 8px;font-size:13px}
+  main{padding:22px 14px 100px}
+  nav a{padding:14px 11px;font-size:12.5px}
+  .journal th,.journal td{padding:7px 7px;font-size:12.5px}
+  .rule-table th,.rule-table td,.info-table th,.info-table td{padding:8px 7px;font-size:12.5px}
+  .table-scroll .rule-table,.table-scroll .info-table{min-width:430px}
+  .flow{flex-direction:column;align-items:stretch;gap:15px}
+  .flow .fstep{max-width:none}
+  .flow .arrow{transform:rotate(90deg);align-self:center;margin:-8px 0;font-size:18px}
+  .quiz-box{padding:20px 15px}
+  .q-question{font-size:15.5px}
+  .q-choice{padding:12px 13px}
+  .sensei{padding:12px 13px;gap:10px}
+  .sensei .neko{width:50px;height:50px}
+  .sensei .s-text{font-size:13.5px}
+  .ch-nav{justify-content:center;gap:8px}
+  .ch-nav .ch-btn{flex:1 1 auto;text-align:center;padding:11px 14px;font-size:12.5px}
+  .steps li{font-size:13.5px}
+  .taccount .thead div{font-size:14.5px}
+  .neko-fab{width:60px;height:60px;right:14px;bottom:14px}
+  .neko-panel{bottom:86px;right:14px}
 }
 </style>
 </head>
@@ -1175,7 +1212,8 @@ footer{
 
 <footer>
   はじめての簿記教室 — 日商簿記3級レベルの学習用教材<br>
-  試験制度の詳細は日本商工会議所の公式情報をご確認ください。クイズの成績・学習進捗はこのブラウザ内にのみ保存されます。
+  試験制度の詳細は日本商工会議所の公式情報をご確認ください。クイズの成績・学習進捗はこのブラウザ内にのみ保存されます。<br>
+  📱 スマホではブラウザのメニューから<b>「ホーム画面に追加」</b>すると、アプリのように開けて便利です。
 </footer>
 
 <button class="neko-fab" id="nekoFab" title="ネコ師匠(学習進捗)" aria-label="ネコ師匠の進捗パネルを開く">
@@ -1584,6 +1622,22 @@ const QUIZ = {
 
   renderDoneBoxes();
   window.updateProgressUI();
+})();
+
+/* ================= モバイル対応 ================= */
+(function(){
+  // 幅の広い表を横スクロール可能なコンテナで包む
+  document.querySelectorAll('.journal, .rule-table, .info-table').forEach(function(t){
+    if(t.parentNode.classList && t.parentNode.classList.contains('table-scroll')) return;
+    var w = document.createElement('div');
+    w.className = 'table-scroll';
+    t.parentNode.insertBefore(w, t);
+    w.appendChild(t);
+  });
+  // オフラインでも学習できるようにService Workerを登録(公開サイトのみ)
+  if('serviceWorker' in navigator && location.protocol === 'https:'){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  }
 })();
 </script>
 </body>
