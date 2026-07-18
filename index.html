@@ -268,6 +268,53 @@ ul.plain li{margin-bottom:4px}
 .gl-item dt small{font-weight:500;color:var(--ink-soft);margin-left:6px;font-size:11px}
 .gl-item dd{color:var(--ink-soft);line-height:1.7}
 
+/* ---------- ネコ師匠 ---------- */
+.sensei{
+  display:flex;gap:14px;align-items:flex-start;background:#fff;border:2px solid var(--ink);
+  border-radius:14px;padding:14px 18px;margin:0 0 22px;box-shadow:var(--shadow);position:relative;
+}
+.sensei .neko{width:66px;height:66px;flex:none}
+.sensei .s-body{flex:1}
+.sensei .s-name{font-family:"Shippori Mincho",serif;font-weight:800;font-size:12.5px;color:var(--shu);letter-spacing:.18em;margin-bottom:2px}
+.sensei .s-text{font-size:14px;line-height:1.85}
+.sensei .s-text b{color:var(--shu)}
+
+.neko-fab{
+  position:fixed;right:18px;bottom:18px;z-index:90;width:66px;height:66px;border-radius:50%;
+  background:var(--paper-dark);border:3px solid var(--ink);cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);padding:5px;transition:transform .2s;
+}
+.neko-fab:hover{transform:translateY(-3px) rotate(-5deg)}
+.neko-fab .pct{
+  position:absolute;top:-7px;right:-12px;background:var(--shu);color:#fff;font-size:11px;
+  font-weight:900;border-radius:999px;padding:2px 8px;font-family:inherit;letter-spacing:.02em;
+}
+.neko-panel{
+  position:fixed;right:18px;bottom:96px;z-index:89;width:min(350px,calc(100vw - 36px));
+  background:var(--card);border:2px solid var(--ink);border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);padding:17px 19px;display:none;
+}
+.neko-panel.open{display:block;animation:pop .25s ease}
+.neko-panel h3{font-size:15.5px;margin-bottom:2px}
+.np-legend{font-size:11px;color:var(--ink-soft);margin-bottom:8px}
+.np-bar{height:10px;background:var(--paper-dark);border-radius:99px;overflow:hidden;margin:4px 0 3px}
+.np-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--shu),#e0862f);border-radius:99px;transition:width .4s}
+.np-pct{font-size:12px;font-weight:900;color:var(--shu);text-align:right}
+.np-list{margin-top:8px;font-size:12.5px;max-height:38vh;overflow-y:auto}
+.np-row{display:flex;align-items:center;padding:5px 2px;border-bottom:1px dashed var(--line);gap:8px}
+.np-row .nm{flex:1;line-height:1.5}
+.np-ok{color:var(--revenue);font-weight:900}
+.np-no{color:#c9bda2;font-weight:900}
+.np-best{font-size:11px;color:var(--ink-soft);white-space:nowrap}
+.np-pass{color:#fff;background:var(--shu);border-radius:4px;font-size:10px;font-weight:900;padding:1px 6px;white-space:nowrap}
+.np-tip{margin-top:10px;background:var(--shu-soft);border-radius:10px;padding:10px 13px;font-size:12.5px;line-height:1.8}
+.np-tip b{color:var(--shu)}
+nav a .nav-check{color:var(--revenue);font-weight:900;margin-left:3px}
+.cat-chip .stamp{
+  position:absolute;bottom:8px;right:10px;color:var(--shu);border:2px solid var(--shu);
+  border-radius:6px;font-size:10.5px;font-weight:900;padding:0 6px;transform:rotate(-6deg);opacity:.9;
+}
+
 footer{
   border-top:3px double var(--line);background:var(--paper-dark);
   text-align:center;padding:26px 20px;font-size:12px;color:var(--ink-soft);
@@ -281,6 +328,24 @@ footer{
 </style>
 </head>
 <body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<symbol id="neko-svg" viewBox="0 0 120 120">
+  <path d="M96 92 q23 -4 14 -29" stroke="#8a7a66" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <ellipse cx="58" cy="93" rx="33" ry="21" fill="#f2e9d6" stroke="#43392e" stroke-width="3.5"/>
+  <path d="M30 34 L36 10 L52 24 Z" fill="#f2e9d6" stroke="#43392e" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M86 34 L80 10 L64 24 Z" fill="#f2e9d6" stroke="#43392e" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M36 16 L39 13.5 L46 20 Z" fill="#d98a7f"/>
+  <path d="M80 16 L77 13.5 L70 20 Z" fill="#d98a7f"/>
+  <circle cx="58" cy="46" r="29" fill="#f2e9d6" stroke="#43392e" stroke-width="3.5"/>
+  <path d="M46 21 q3 7 -1 11 M58 18 v12 M70 21 q-3 7 1 11" stroke="#c3ad8a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M41 46 q6 6 12 0" stroke="#43392e" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M63 46 q6 6 12 0" stroke="#43392e" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M54 57 q4 4 8 0" stroke="#43392e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M20 44 L36 47 M20 55 L36 53 M96 44 L80 47 M96 55 L80 53" stroke="#43392e" stroke-width="2" stroke-linecap="round"/>
+  <path d="M36 69 q22 13 44 0 l4 9 q-26 13 -52 0 Z" fill="#cf4a2b" stroke="#43392e" stroke-width="3" stroke-linejoin="round"/>
+</symbol>
+</svg>
 
 <header>
   <div class="hanko">簿</div>
@@ -1097,8 +1162,21 @@ footer{
 
 <footer>
   はじめての簿記教室 — 日商簿記3級レベルの学習用教材<br>
-  試験制度の詳細は日本商工会議所の公式情報をご確認ください。クイズの成績はこのブラウザ内にのみ保存されます。
+  試験制度の詳細は日本商工会議所の公式情報をご確認ください。クイズの成績・学習進捗はこのブラウザ内にのみ保存されます。
 </footer>
+
+<button class="neko-fab" id="nekoFab" title="ネコ師匠(学習進捗)" aria-label="ネコ師匠の進捗パネルを開く">
+  <svg viewBox="0 0 120 120" style="width:100%;height:100%"><use href="#neko-svg"/></svg>
+  <span class="pct" id="nekoPct">0%</span>
+</button>
+<div class="neko-panel" id="nekoPanel">
+  <h3>ネコ師匠の進捗チェック</h3>
+  <div class="np-legend">✓=章を読んだ/<span class="np-pass" style="margin:0 2px">合格</span>=クイズで70%以上</div>
+  <div class="np-bar"><i id="npBarFill"></i></div>
+  <div class="np-pct" id="npPct"></div>
+  <div class="np-list" id="npList"></div>
+  <div class="np-tip" id="npTip"></div>
+</div>
 
 <script>
 /* ================= ページ切替 ================= */
@@ -1109,6 +1187,8 @@ footer{
     if(!document.getElementById(id)) id = 'ch1';
     pages.forEach(p=>p.classList.toggle('active', p.id===id));
     links.forEach(a=>a.classList.toggle('cur', a.getAttribute('href')==='#'+id));
+    if(/^ch\d$/.test(id)){ try{ localStorage.setItem('boki3_read_'+id,'1'); }catch(e){} }
+    if(window.updateProgressUI) window.updateProgressUI();
     window.scrollTo({top:0});
   }
   window.addEventListener('hashchange', ()=>show(location.hash.slice(1)||'ch1'));
@@ -1231,12 +1311,19 @@ const QUIZ = {
       const chip = document.createElement('button');
       chip.className = 'cat-chip' + (c.mock ? ' mock' : '') + (k===cat ? ' active' : '');
       const best = getBest(k);
+      let pass = false;
+      if(best){
+        const p = best.split('/');
+        pass = parseInt(p[0],10) / parseInt(p[1],10) >= 0.7;
+      }
       chip.innerHTML = '<span class="cname">' + (c.mock ? '🎓 ' : '') + c.name + '</span>' +
         '<span class="cmeta">全' + total + '問' + (c.mock ? '・全分野から出題' : '') + '</span>' +
-        (best ? '<span class="best">自己ベスト ' + best + '</span>' : '');
+        (best ? '<span class="best">自己ベスト ' + best + '</span>' : '') +
+        (pass ? '<span class="stamp">合格</span>' : '');
       chip.addEventListener('click', ()=>startCat(k));
       catGrid.appendChild(chip);
     });
+    if(window.updateProgressUI) window.updateProgressUI();
   }
 
   function buildMock(){
@@ -1343,6 +1430,115 @@ const QUIZ = {
   }
 
   renderCats();
+})();
+
+/* ================= ネコ師匠と学習進捗 ================= */
+(function(){
+  const CHAPTERS = [
+    {id:'ch1', name:'第1章 基礎', cat:'basic'},
+    {id:'ch2', name:'第2章 商品売買', cat:'trade'},
+    {id:'ch3', name:'第3章 現金・預金', cat:'cash'},
+    {id:'ch4', name:'第4章 債権・債務', cat:'claims'},
+    {id:'ch5', name:'第5章 固定資産', cat:'fixed'},
+    {id:'ch6', name:'第6章 会社と税金', cat:'tax'},
+    {id:'ch7', name:'第7章 決算', cat:'closing'},
+    {id:'ch8', name:'第8章 帳簿・伝票', cat:'books'}
+  ];
+
+  const TIPS = {
+    ch1:'わしがネコ師匠じゃ。簿記で迷子になったら、まず<b>ホームポジション</b>に戻るのじゃ。資産・費用は左、負債・純資産・収益は右。これだけで試験の半分は戦えるニャ。',
+    ch2:'ツケの呪文を授けよう。<b>売ったら売掛金、買ったら買掛金</b>。それと、買うときの送料は仕入に上乗せ、売るときの送料は発送費じゃ。逆にすると減点ニャ。',
+    ch3:'小切手は3パターンじゃ。<b>振り出したら当座預金の減少、他人からもらったら現金、自分が振り出した小切手が戻ってきたら当座預金</b>。ここは試験官の大好物ニャ。',
+    ch4:'似た者同士に注意するのじゃ。<b>商品のツケは買掛金、それ以外のツケは未払金</b>。そして<b>手付金は前払金、金額が未確定の概算払いは仮払金</b>。区別できたら一人前ニャ。',
+    ch5:'減価償却は<b>(取得原価−残存価額)÷耐用年数</b>、期の途中で買ったら月割りじゃ。売却の問題は、まず帳簿価額を出してから売値と比べる。順序が大事ニャ。',
+    ch6:'税金は3つの顔を持つのじゃ。<b>費用になる租税公課、もうけにかかる法人税等、預かって納める消費税</b>。それぞれ別の科目で処理するニャ。',
+    ch7:'決算整理は型の勝負じゃ。<b>「しーくり くりしー」</b>は声に出して唱えるのじゃぞ。貸倒引当金は<b>差額だけ</b>繰り入れる。ここが第3問の得点源ニャ。',
+    ch8:'補助簿の問題はな、<b>まず仕訳を書く</b>のじゃ。出てきた科目が、記入すべき帳簿を教えてくれる。伝票は「現金が動くかどうか」だけで見分けるニャ。',
+    quiz:'合格ラインは<b>70%</b>じゃ。全8分野で合格スタンプを集めたら免許皆伝。右下のわしを押せば、いつでも進捗が見られるニャ。',
+    glossary:'用語に迷うのは成長の証じゃ。<b>科目名を見たら、まず5つのどのグループか</b>。この順で思い出す癖をつけるのじゃニャ。'
+  };
+
+  const KOTOBA = [
+    '毎日10分の仕訳練習は、一夜漬けに勝るのじゃ。',
+    '間違えた問題こそ宝じゃ。解説を読んで、もう一度解くのじゃニャ。',
+    '仕訳に迷ったら、まず現金の増減から考えると道が開けるニャ。',
+    '満点でなくてよい。70点で合格は合格じゃ。まず一周するのじゃ。',
+    '休憩も修行のうちニャ。詰まったら茶でも飲んで戻ってくるのじゃ。',
+    '第1問の仕訳15題(45点)を取れば合格は目の前じゃ。クイズを繰り返すニャ。'
+  ];
+
+  // 各章の冒頭に師匠のひとことを差し込む
+  Object.keys(TIPS).forEach(id=>{
+    const sub = document.querySelector('#' + id + ' .sec-sub');
+    if(sub) sub.insertAdjacentHTML('afterend',
+      '<div class="sensei">' +
+        '<svg class="neko" viewBox="0 0 120 120"><use href="#neko-svg"/></svg>' +
+        '<div class="s-body"><div class="s-name">ネコ師匠</div><div class="s-text">' + TIPS[id] + '</div></div>' +
+      '</div>');
+  });
+
+  function isRead(id){ try{ return localStorage.getItem('boki3_read_'+id)==='1'; }catch(e){ return false; } }
+  function best(cat){ try{ return localStorage.getItem('boki3_best_'+cat); }catch(e){ return null; } }
+  function passed(cat){
+    const b = best(cat);
+    if(!b) return false;
+    const p = b.split('/');
+    return parseInt(p[0],10) / parseInt(p[1],10) >= 0.7;
+  }
+  function percent(){
+    let done = 0;
+    CHAPTERS.forEach(c=>{ if(isRead(c.id)) done++; if(passed(c.cat)) done++; });
+    return Math.round(done / (CHAPTERS.length*2) * 100);
+  }
+
+  window.updateProgressUI = function(){
+    const p = percent();
+    document.getElementById('nekoPct').textContent = p + '%';
+    document.getElementById('npBarFill').style.width = p + '%';
+    document.getElementById('npPct').textContent = '総合進捗 ' + p + '%' + (p===100 ? ' — 免許皆伝ニャ!' : '');
+    // ナビに✓(クイズ合格済みの章)
+    document.querySelectorAll('nav a').forEach(a=>{
+      const id = (a.getAttribute('href')||'').slice(1);
+      const ch = CHAPTERS.find(c=>c.id===id);
+      const old = a.querySelector('.nav-check');
+      if(old) old.remove();
+      if(ch && passed(ch.cat)) a.insertAdjacentHTML('beforeend','<span class="nav-check">✓</span>');
+    });
+    // 章ごとの一覧
+    const mb = best('mock');
+    document.getElementById('npList').innerHTML = CHAPTERS.map(c=>{
+      const b = best(c.cat);
+      return '<div class="np-row">' +
+        '<span class="' + (isRead(c.id)?'np-ok':'np-no') + '">' + (isRead(c.id)?'✓':'─') + '</span>' +
+        '<span class="nm">' + c.name + '</span>' +
+        '<span class="np-best">' + (b ? b : '未挑戦') + '</span>' +
+        (passed(c.cat) ? '<span class="np-pass">合格</span>' : '') +
+      '</div>';
+    }).join('') +
+    '<div class="np-row"><span class="' + (mb?'np-ok':'np-no') + '">' + (mb?'✓':'─') + '</span>' +
+      '<span class="nm">🎓 総合模擬テスト</span>' +
+      '<span class="np-best">' + (mb ? mb : '未挑戦') + '</span>' +
+      (passed('mock') ? '<span class="np-pass">合格</span>' : '') +
+    '</div>';
+  };
+
+  const fab = document.getElementById('nekoFab');
+  const panel = document.getElementById('nekoPanel');
+  fab.addEventListener('click', ()=>{
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')){
+      window.updateProgressUI();
+      document.getElementById('npTip').innerHTML =
+        '<b>師匠のひとこと:</b>' + KOTOBA[Math.floor(Math.random()*KOTOBA.length)];
+    }
+  });
+  document.addEventListener('click', (e)=>{
+    if(panel.classList.contains('open') && !panel.contains(e.target) && !fab.contains(e.target)){
+      panel.classList.remove('open');
+    }
+  });
+
+  window.updateProgressUI();
 })();
 </script>
 </body>
