@@ -93,6 +93,20 @@ nav a.cur{color:var(--shu);border-bottom-color:var(--shu)}
 nav a.quiz-link{color:#fff;background:var(--shu);border-radius:8px 8px 0 0;margin-left:6px}
 nav a.quiz-link:hover{filter:brightness(1.1);border-bottom-color:transparent}
 
+.nav-toggle{
+  display:none;width:100%;border:0;background:transparent;color:var(--ink);
+  font-family:inherit;padding:10px 14px;cursor:pointer;text-align:left;
+  align-items:center;justify-content:space-between;gap:12px;
+}
+.nav-toggle-label{display:flex;align-items:baseline;gap:10px;min-width:0}
+.nav-toggle-label small{font-size:10.5px;color:var(--ink-soft);font-weight:700;white-space:nowrap}
+.nav-toggle-label b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-toggle-icon{
+  width:34px;height:34px;border:1px solid var(--line);border-radius:9px;background:var(--card);
+  display:grid;place-items:center;font-size:18px;line-height:1;flex:none;
+}
+nav.open .nav-toggle-icon{background:var(--shu);border-color:var(--shu);color:#fff}
+
 /* ---------- layout / pages ---------- */
 main{max-width:1100px;margin:0 auto;padding:30px 20px 90px}
 .page{display:none}
@@ -342,11 +356,24 @@ footer{
 .table-scroll>table{margin-top:0;margin-bottom:0}
 .table-scroll{margin:12px 0 6px}
 @media(max-width:820px){
-  nav::after{
-    content:'';position:absolute;right:0;top:0;height:100%;width:26px;
-    background:linear-gradient(90deg,rgba(250,246,236,0),rgba(250,246,236,.95));
-    pointer-events:none;
+  .nav-toggle{display:flex}
+  nav ul{
+    display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;
+    padding:0 12px 12px;max-height:calc(100vh - 66px);overflow-y:auto;
   }
+  nav.open ul{display:grid}
+  nav li{min-width:0}
+  nav a{
+    white-space:normal;padding:10px 7px;font-size:12.5px;line-height:1.45;text-align:center;
+    border:1px solid var(--line);border-radius:9px;background:var(--card);
+  }
+  nav a:hover{border-color:var(--shu)}
+  nav a.cur{
+    color:var(--shu);border-color:var(--shu);border-bottom-color:var(--shu);
+    background:#fff7f3;box-shadow:0 0 0 2px rgba(207,74,43,.10);
+  }
+  nav a.quiz-link{margin-left:0;border-radius:9px;grid-column:1/-1}
+  nav li:last-child{grid-column:1/-1}
 }
 @media(max-width:640px){
   .bspl{grid-template-columns:1fr}
@@ -355,7 +382,6 @@ footer{
   header{padding:30px 18px 26px}
   .hanko{width:52px;height:52px;font-size:20px;top:12px}
   main{padding:22px 14px 100px}
-  nav a{padding:14px 11px;font-size:12.5px}
   .journal th,.journal td{padding:7px 7px;font-size:12.5px}
   .rule-table th,.rule-table td,.info-table th,.info-table td{padding:8px 7px;font-size:12.5px}
   .table-scroll .rule-table,.table-scroll .info-table{min-width:430px}
@@ -374,6 +400,10 @@ footer{
   .taccount .thead div{font-size:14.5px}
   .neko-fab{width:60px;height:60px;right:14px;bottom:14px}
   .neko-panel{bottom:86px;right:14px}
+}
+@media(max-width:390px){
+  nav ul{grid-template-columns:1fr}
+  nav a.quiz-link,nav li:last-child{grid-column:auto}
 }
 </style>
 </head>
@@ -404,8 +434,12 @@ footer{
   <p class="lede">ゼロから簿記3級合格レベルまで。全8章の解説と分野別4択クイズ・模擬テストで、仕訳を体に染み込ませましょう。</p>
 </header>
 
-<nav>
-  <ul>
+<nav id="chapterNav">
+  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="chapterMenu">
+    <span class="nav-toggle-label"><small>現在のページ</small><b id="navCurrent">1 基礎</b></span>
+    <span class="nav-toggle-icon" aria-hidden="true">☰</span>
+  </button>
+  <ul id="chapterMenu">
     <li><a href="#ch1">1 基礎</a></li>
     <li><a href="#ch2">2 商品売買</a></li>
     <li><a href="#ch3">3 現金・預金</a></li>
@@ -1234,13 +1268,40 @@ footer{
 (function(){
   const pages = document.querySelectorAll('.page');
   const links = document.querySelectorAll('nav a');
+  const nav = document.getElementById('chapterNav');
+  const toggle = document.getElementById('navToggle');
+  const current = document.getElementById('navCurrent');
+
+  links.forEach(a=>{ a.dataset.label = a.textContent.trim(); });
+
+  function closeMenu(){
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded','false');
+  }
+
   function show(id){
     if(!document.getElementById(id)) id = 'ch1';
     pages.forEach(p=>p.classList.toggle('active', p.id===id));
     links.forEach(a=>a.classList.toggle('cur', a.getAttribute('href')==='#'+id));
+    const active = Array.from(links).find(a=>a.getAttribute('href')==='#'+id);
+    current.textContent = active ? active.dataset.label : '1 基礎';
+    closeMenu();
     if(window.updateProgressUI) window.updateProgressUI();
     window.scrollTo({top:0});
   }
+
+  toggle.addEventListener('click', ()=>{
+    const willOpen = !nav.classList.contains('open');
+    nav.classList.toggle('open', willOpen);
+    toggle.setAttribute('aria-expanded', String(willOpen));
+  });
+
+  links.forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeMenu(); });
+  document.addEventListener('click', e=>{
+    if(nav.classList.contains('open') && !nav.contains(e.target)) closeMenu();
+  });
+
   window.addEventListener('hashchange', ()=>show(location.hash.slice(1)||'ch1'));
   show(location.hash.slice(1)||'ch1');
 })();
