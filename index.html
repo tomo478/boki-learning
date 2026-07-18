@@ -310,6 +310,19 @@ ul.plain li{margin-bottom:4px}
 .np-tip{margin-top:10px;background:var(--shu-soft);border-radius:10px;padding:10px 13px;font-size:12.5px;line-height:1.8}
 .np-tip b{color:var(--shu)}
 nav a .nav-check{color:var(--revenue);font-weight:900;margin-left:3px}
+.done-box{text-align:center;margin:32px 0 4px}
+.done-btn{
+  background:#fff;border:2px solid var(--revenue);color:var(--revenue);border-radius:999px;
+  padding:13px 36px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;
+  transition:.2s;letter-spacing:.06em;
+}
+.done-btn:hover{background:var(--revenue);color:#fff;transform:translateY(-2px)}
+.done-btn.is-done{background:var(--revenue);color:#fff;cursor:default;transform:none}
+.done-undo{
+  display:block;margin:8px auto 0;font-size:12px;color:var(--ink-soft);background:none;
+  border:none;cursor:pointer;text-decoration:underline;font-family:inherit;
+}
+.done-undo:hover{color:var(--shu)}
 .cat-chip .stamp{
   position:absolute;bottom:8px;right:10px;color:var(--shu);border:2px solid var(--shu);
   border-radius:6px;font-size:10.5px;font-weight:900;padding:0 6px;transform:rotate(-6deg);opacity:.9;
@@ -1171,7 +1184,7 @@ footer{
 </button>
 <div class="neko-panel" id="nekoPanel">
   <h3>ネコ師匠の進捗チェック</h3>
-  <div class="np-legend">✓=章を読んだ/<span class="np-pass" style="margin:0 2px">合格</span>=クイズで70%以上</div>
+  <div class="np-legend">✓=章を完了した/<span class="np-pass" style="margin:0 2px">合格</span>=クイズで70%以上</div>
   <div class="np-bar"><i id="npBarFill"></i></div>
   <div class="np-pct" id="npPct"></div>
   <div class="np-list" id="npList"></div>
@@ -1187,7 +1200,6 @@ footer{
     if(!document.getElementById(id)) id = 'ch1';
     pages.forEach(p=>p.classList.toggle('active', p.id===id));
     links.forEach(a=>a.classList.toggle('cur', a.getAttribute('href')==='#'+id));
-    if(/^ch\d$/.test(id)){ try{ localStorage.setItem('boki3_read_'+id,'1'); }catch(e){} }
     if(window.updateProgressUI) window.updateProgressUI();
     window.scrollTo({top:0});
   }
@@ -1477,6 +1489,38 @@ const QUIZ = {
       '</div>');
   });
 
+  // 各章の下部に「この章を完了する」ボタンを差し込む
+  CHAPTERS.forEach(c=>{
+    const nav = document.querySelector('#' + c.id + ' .ch-nav');
+    if(nav) nav.insertAdjacentHTML('beforebegin', '<div class="done-box" id="done-' + c.id + '"></div>');
+  });
+
+  function renderDoneBoxes(){
+    CHAPTERS.forEach(c=>{
+      const box = document.getElementById('done-' + c.id);
+      if(!box) return;
+      if(isRead(c.id)){
+        box.innerHTML = '<button class="done-btn is-done">✓ この章は完了済みニャ</button>' +
+          '<button class="done-undo" data-ch="' + c.id + '">完了を取り消す</button>';
+      }else{
+        box.innerHTML = '<button class="done-btn" data-ch="' + c.id + '">📖 この章を読み終わった!(完了にする)</button>';
+      }
+    });
+  }
+
+  document.querySelector('main').addEventListener('click', function(e){
+    const undo = e.target.closest('.done-undo');
+    const done = e.target.closest('.done-btn:not(.is-done)');
+    const btn = undo || done;
+    if(!btn || !btn.dataset.ch) return;
+    try{
+      if(undo) localStorage.removeItem('boki3_read_' + btn.dataset.ch);
+      else localStorage.setItem('boki3_read_' + btn.dataset.ch, '1');
+    }catch(err){}
+    renderDoneBoxes();
+    window.updateProgressUI();
+  });
+
   function isRead(id){ try{ return localStorage.getItem('boki3_read_'+id)==='1'; }catch(e){ return false; } }
   function best(cat){ try{ return localStorage.getItem('boki3_best_'+cat); }catch(e){ return null; } }
   function passed(cat){
@@ -1538,6 +1582,7 @@ const QUIZ = {
     }
   });
 
+  renderDoneBoxes();
   window.updateProgressUI();
 })();
 </script>
